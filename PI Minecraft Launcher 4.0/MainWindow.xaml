@@ -1,0 +1,1900 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:WpfTest="clr-namespace:PI_Minecraft_Launcher_4._0"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="PI_Minecraft_Launcher_4._0.MainWindow"
+        Title="PI Minecraft Launcher" Height="530" Width="450" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" BorderThickness="1" Icon="minecraftico,ico.ico" SourceInitialized="Window_SourceInitialized" Background="White" WindowStyle="None" SnapsToDevicePixels="True">
+    <Window.Resources>
+        <Style x:Key="ButtonFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="Black" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <LinearGradientBrush x:Key="ButtonNormalBackground" EndPoint="0,1" StartPoint="0,0">
+            <GradientStop Color="#F3F3F3" Offset="0"/>
+            <GradientStop Color="#EBEBEB" Offset="0.5"/>
+            <GradientStop Color="#DDDDDD" Offset="0.5"/>
+            <GradientStop Color="#CDCDCD" Offset="1"/>
+        </LinearGradientBrush>
+        <Storyboard x:Key="WaitCircle" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="icnServerStatus_checking" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                <SplineDoubleKeyFrame KeyTime="00:00:01" Value="360"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.49"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0.5"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0.995"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.9" Value="0.495"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0.5"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="txtServerStatus_checking">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.9" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <SolidColorBrush x:Key="ButtonNormalBorder" Color="#FF707070"/>
+        <Style x:Key="ButtonStyle_Title" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="OnMouseEnter1"/>
+                            <Storyboard x:Key="OnMouseLeave1"/>
+                        </ControlTemplate.Resources>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonStyle_TitleButton" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Rectangle Stroke="White"/>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Foreground" Value="#FF29B600"/>
+                                <Setter Property="Background" Value="{x:Null}"/>
+                                <Setter Property="BorderBrush" Value="#FF00FF23"/>
+                            </Trigger>
+                            <Trigger Property="IsDefaulted" Value="True">
+                                <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                <Setter Property="Background" Value="{x:Null}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#FF00FF23"/>
+                                <Setter Property="BorderBrush" Value="#FF00FF23"/>
+                                <Setter Property="Background" Value="{x:Null}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="#FF079700"/>
+                                <Setter Property="Background" Value="{x:Null}"/>
+                                <Setter Property="BorderBrush" Value="#FF079700"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="{x:Null}"/>
+                                <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                <Setter Property="Foreground" Value="#FF707070"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonStyle_Main" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Rectangle x:Name="rectangle" Fill="#FF00910D" StrokeThickness="2" Stroke="White"/>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Fill" TargetName="rectangle" Value="#FF0073C3"/>
+                                <Setter Property="Stroke" TargetName="rectangle">
+                                    <Setter.Value>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FFDADA29" Offset="0"/>
+                                            <GradientStop Color="#FFFFE800" Offset="0.996"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsDefaulted" Value="True">
+                                <Setter Property="Fill" TargetName="rectangle" Value="#FF006991"/>
+                                <Setter Property="Stroke" TargetName="rectangle" Value="#FF00DCFF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Fill" TargetName="rectangle" Value="#FF00CF13"/>
+                                <Setter Property="Stroke" TargetName="rectangle" Value="#FF008318"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Fill" TargetName="rectangle" Value="#FF006609"/>
+                                <Setter Property="Stroke" TargetName="rectangle" Value="#FF002F49"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Fill" TargetName="rectangle" Value="#FF787878"/>
+                                <Setter Property="Stroke" TargetName="rectangle" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Storyboard x:Key="bdrEULAShow">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrEULA">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.9" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrEULA">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.9" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="bdrEULA_Hide">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrEULA">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="0.01"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrEULA">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.7" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.8" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="bdrEULA_Show">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrEULA">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrEULA">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ChangeTitleStatus">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtMainStatus1">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.98"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.6" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="txtMainStatus1">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="-32"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="txtMainStatus2">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtMainStatus2">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="txtMainStatus2">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.6" Value="-34"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="txtMainStatus1">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.6" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusBar_Online">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.985"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="icnServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.985"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="txtServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-32"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="icnServerStatus_Online">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_Online">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="txtServerStatus_Online">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="-38"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="txtServerStatus_Online">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="txtServerStatus_checking">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusBar_Offline">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="icnServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="txtServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="33"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="icnServerStatus_Offline">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="txtServerStatus_Offline">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_Offline">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="txtServerStatus_Offline">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="32"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowTabLogin">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrLoginOffline">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderThickness)" Storyboard.TargetName="bdrLoginOffline">
+                <SplineThicknessKeyFrame KeyTime="0" Value="0,1,1,1"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="bdrLoginOffline">
+                <SplineDoubleKeyFrame KeyTime="0" Value="116"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="2" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="bdrLoginSignUp">
+                <SplineDoubleKeyFrame KeyTime="0" Value="95"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="4" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrLoginSignUp">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrMinecraftLogin">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="bdrMinecraftLogin">
+                <SplineDoubleKeyFrame KeyTime="0" Value="46"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="2" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="bdrMinecraftLogin">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowTabSetting">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="TabLoginGrid">
+                <SplineDoubleKeyFrame KeyTime="0" Value="141"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-3" KeySpline="0,0,1,0.53"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TabLoginGrid">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0,1,0.53"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="bdrSettingVisual">
+                <SplineDoubleKeyFrame KeyTime="0" Value="247"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="0" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="bdrSettingJavaEnv">
+                <SplineDoubleKeyFrame KeyTime="0" Value="179"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="bdrSettingMem">
+                <SplineDoubleKeyFrame KeyTime="0" Value="108"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="-0.002" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrSettingMem">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrSettingJavaEnv">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrSettingVisual">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrSettingVisual">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.7" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowTabUserSetting">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="txtWelcome">
+                <SplineDoubleKeyFrame KeyTime="0" Value="-273"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="-1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtCurrentId">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLogout">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnLogout">
+                <SplineDoubleKeyFrame KeyTime="0" Value="80"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-2"/>
+            </DoubleAnimationUsingKeyFrames>
+            <PointAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(RadialGradientBrush.GradientOrigin)" Storyboard.TargetName="bdrUserTitle">
+                <SplinePointKeyFrame KeyTime="0" Value="0.981,0.919"/>
+                <SplinePointKeyFrame KeyTime="0:0:0.4" Value="0.004,0.053" KeySpline="0,0,0,1"/>
+            </PointAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(RadialGradientBrush.RadiusX)" Storyboard.TargetName="bdrUserTitle">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.475"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0.537" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <PointAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(RadialGradientBrush.Center)" Storyboard.TargetName="bdrUserTitle">
+                <SplinePointKeyFrame KeyTime="0" Value="0.836,0.572"/>
+                <SplinePointKeyFrame KeyTime="0:0:0.4" Value="0.023,0.095" KeySpline="0,0,0,1"/>
+            </PointAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(RadialGradientBrush.RadiusY)" Storyboard.TargetName="bdrUserTitle">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1.364"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1.727" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[0].(GradientStop.Offset)" Storyboard.TargetName="bdrUserTitle">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[0].(GradientStop.Offset)" Storyboard.TargetName="bdrUserTitle">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border1">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.065"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0.065"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.3" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border1">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.065"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0.065"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.3" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border1">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.3" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border2">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.07"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="0.07"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="1.005" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border2">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.07"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="0.07"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="1.005" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border2">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="0.01"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="border2">
+                <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="0" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="border2">
+                <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="0" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.165"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="0.165"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.1" Value="1.004" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.165"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="0.165"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.1" Value="1.004" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="border">
+                <SplineDoubleKeyFrame KeyTime="0" Value="178.68"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="178.68"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.1" Value="-0.844" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="border">
+                <SplineDoubleKeyFrame KeyTime="0" Value="43"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="43"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.1" Value="-0.203" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.1" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusBar_Checking">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="icnServerStatus_Online">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_Online">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="icnServerStatus_Offline">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_Offline">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="icnServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.995"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0.995"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="txtServerStatus_checking">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="txtServerStatus_checking">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusBar_Blink">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="bdrStatusBar">
+                <SplineColorKeyFrame KeyTime="0" Value="White"/>
+                <SplineColorKeyFrame KeyTime="0:0:0.2" Value="#FFFFD100"/>
+                <SplineColorKeyFrame KeyTime="0:0:0.6" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusRedBlink">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="bdrStatus">
+                <SplineColorKeyFrame KeyTime="0:0:0.5" Value="White"/>
+                <SplineColorKeyFrame KeyTime="0:0:0.9" Value="#FFFB8080"/>
+                <SplineColorKeyFrame KeyTime="0:0:1.5" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusYellowBlink">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="bdrStatus">
+                <SplineColorKeyFrame KeyTime="0:0:0.5" Value="White"/>
+                <SplineColorKeyFrame KeyTime="0:0:0.9" Value="#FFF1F16E"/>
+                <SplineColorKeyFrame KeyTime="0:0:1.5" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusGreenBlink">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="bdrStatus">
+                <SplineColorKeyFrame KeyTime="0:0:0.5" Value="White"/>
+                <SplineColorKeyFrame KeyTime="0:0:0.9" Value="#FF4BE04B"/>
+                <SplineColorKeyFrame KeyTime="0:0:1.5" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="StatusBlueBlink" RepeatBehavior="Forever">
+            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="bdrStatus">
+                <SplineColorKeyFrame KeyTime="0" Value="White"/>
+                <SplineColorKeyFrame KeyTime="0:0:0.5" Value="White"/>
+                <SplineColorKeyFrame KeyTime="0:0:1.5" Value="#FF91C3FF"/>
+                <SplineColorKeyFrame KeyTime="0:0:2.5" Value="White"/>
+                <SplineColorKeyFrame KeyTime="0:0:3" Value="White"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowTabMessage">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="TabMessageGrid">
+                <SplineDoubleKeyFrame KeyTime="0" Value="181"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TabMessageGrid">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0.995" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowTabJoin">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="bdrJoinOther">
+                <SplineDoubleKeyFrame KeyTime="0" Value="118"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="3" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrJoinOther">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.7" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="bdrJoinTitle">
+                <SplineDoubleKeyFrame KeyTime="0" Value="55"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="2" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrJoinTitle">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowTabAbout">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TabAboutGrid">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="1" KeySpline="0,0.06,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="TabAboutGrid">
+                <SplineDoubleKeyFrame KeyTime="0" Value="200"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1" Value="-1" KeySpline="0,0.06,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="label">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="txtAboutVersion">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.8" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="label1">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.8" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="label2">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="imgFacebook">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.5" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:1.8" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowNoInternetConnection">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNoConnection">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNoConnection">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="HideNoConnection">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNoConnection">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNoConnection">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowMessage">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrMessage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrMessage">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="HideMessage">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrMessage">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.995"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0.005"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrMessage">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.4" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="showNeed64BitJava">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNeed64BitJava">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNeed64BitJava">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0.02"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="HideNeed64Java">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNeed64BitJava">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.4" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNeed64BitJava">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowNoJava">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNoJava">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNoJava">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0.015"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="HideNoJava">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNoJava">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.975"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNoJava">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ShowNoLaunch">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNoLaunchGame">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNoLaunchGame">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0.005"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="HideNoLaunch">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrNoLaunchGame">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.99"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrNoLaunchGame">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.4" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="showUpdateInfo">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrUpdateInfo">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrUpdateInfo">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0,0,1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="showOnlinePlayers">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrOnlinePlayers">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.4" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrOnlinePlayers">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="hideOnlinePlayers">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="bdrOnlinePlayers">
+                <SplineDoubleKeyFrame KeyTime="0" Value="0.985"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="bdrOnlinePlayers">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxShowEULA">
+            <BeginStoryboard Storyboard="{StaticResource bdrEULA_Show}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard x:Name="ChangeTitleStatus_BeginStoryboard" Storyboard="{StaticResource ChangeTitleStatus}"/>
+            <BeginStoryboard x:Name="WaitCircle_BeginStoryboard" Storyboard="{StaticResource WaitCircle}"/>
+            <BeginStoryboard x:Name="StatusBar_Checking_BeginStoryboard" Storyboard="{StaticResource StatusBar_Checking}"/>
+            <BeginStoryboard x:Name="ShowTabAbout_BeginStoryboard" Storyboard="{StaticResource ShowTabAbout}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseDown" SourceName="imgAbout">
+            <BeginStoryboard x:Name="ShowTabAbout_BeginStoryboard1" Storyboard="{StaticResource ShowTabAbout}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnLogout">
+            <BeginStoryboard x:Name="ShowTabLogin_BeginStoryboard" Storyboard="{StaticResource ShowTabLogin}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnChangeSave">
+            <BeginStoryboard x:Name="ShowTabUserSetting_BeginStoryboard1" Storyboard="{StaticResource ShowTabUserSetting}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnCancelChange">
+            <BeginStoryboard x:Name="ShowTabUserSetting_BeginStoryboard2" Storyboard="{StaticResource ShowTabUserSetting}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnLogin">
+            <BeginStoryboard x:Name="ShowTabUserSetting_BeginStoryboard3" Storyboard="{StaticResource ShowTabUserSetting}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnJoin">
+            <BeginStoryboard x:Name="ShowTabJoin_BeginStoryboard1" Storyboard="{StaticResource ShowTabJoin}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnJoinAgree">
+            <BeginStoryboard x:Name="ShowTabLogin_BeginStoryboard3" Storyboard="{StaticResource bdrEULA_Hide}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnCancelJoin">
+            <BeginStoryboard x:Name="ShowTabLogin_BeginStoryboard2" Storyboard="{StaticResource ShowTabLogin}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxStatusBarBlink">
+            <BeginStoryboard x:Name="StatusBar_Blink_BeginStoryboard" Storyboard="{StaticResource StatusBar_Blink}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxAniOnline">
+            <BeginStoryboard x:Name="StatusBar_Checking_BeginStoryboard3" Storyboard="{StaticResource StatusBar_Checking}"/>
+            <StopStoryboard BeginStoryboardName="StatusBar_Online_BeginStoryboard"/>
+            <BeginStoryboard x:Name="StatusBar_Online_BeginStoryboard" Storyboard="{StaticResource StatusBar_Online}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxAniCheckingServer">
+            <BeginStoryboard x:Name="StatusBar_Checking_BeginStoryboard2" Storyboard="{StaticResource StatusBar_Checking}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxAniOffline">
+            <BeginStoryboard x:Name="StatusBar_Checking_BeginStoryboard1" Storyboard="{StaticResource StatusBar_Checking}"/>
+            <StopStoryboard BeginStoryboardName="StatusBar_Offline_BeginStoryboard"/>
+            <BeginStoryboard x:Name="StatusBar_Offline_BeginStoryboard" Storyboard="{StaticResource StatusBar_Offline}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseDown" SourceName="imgProfile">
+            <BeginStoryboard x:Name="ShowTabLogin_BeginStoryboard1" Storyboard="{StaticResource ShowTabLogin}"/>
+            <BeginStoryboard x:Name="ShowTabUserSetting_BeginStoryboard4" Storyboard="{StaticResource ShowTabUserSetting}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseDown" SourceName="imgSettings">
+            <BeginStoryboard x:Name="WaitCircle_BeginStoryboard1" Storyboard="{StaticResource ShowTabSetting}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxAniShowTabUserSettings">
+            <BeginStoryboard x:Name="ShowTabUserSetting_BeginStoryboard" Storyboard="{StaticResource ShowTabUserSetting}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxAniShowTitleStatus">
+            <BeginStoryboard x:Name="ChangeTitleStatus_BeginStoryboard1" Storyboard="{StaticResource ChangeTitleStatus}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxStatusRed">
+            <BeginStoryboard x:Name="StatusRedBlink_BeginStoryboard1" Storyboard="{StaticResource StatusRedBlink}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxStatusYellow">
+            <BeginStoryboard x:Name="StatusYellowBlink_BeginStoryboard" Storyboard="{StaticResource StatusYellowBlink}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxStatusGreen">
+            <BeginStoryboard x:Name="StatusGreenBlink_BeginStoryboard" Storyboard="{StaticResource StatusGreenBlink}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxStatusDownloading">
+            <BeginStoryboard x:Name="StatusBlueBlink_BeginStoryboard" Storyboard="{StaticResource StatusBlueBlink}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="cbxStatusDownloading">
+            <StopStoryboard BeginStoryboardName="StatusBlueBlink_BeginStoryboard"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxStatusBarBlink">
+            <BeginStoryboard x:Name="StatusBar_Blink_BeginStoryboard1" Storyboard="{StaticResource StatusBar_Blink}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxNoConnection">
+            <BeginStoryboard x:Name="ShowNoInternetConnection_BeginStoryboard1" Storyboard="{StaticResource ShowNoInternetConnection}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="cbxNoConnection">
+            <BeginStoryboard x:Name="HideNoConnection_BeginStoryboard1" Storyboard="{StaticResource HideNoConnection}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxShowMsg">
+            <BeginStoryboard x:Name="HideMessage_BeginStoryboard1" Storyboard="{StaticResource ShowMessage}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxHideMsg">
+            <BeginStoryboard x:Name="HideMessage_BeginStoryboard3" Storyboard="{StaticResource HideMessage}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="cbxShowEULA">
+            <BeginStoryboard x:Name="bdrEULA_Hide_BeginStoryboard" Storyboard="{StaticResource bdrEULA_Hide}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxShow64JavaInfo">
+            <BeginStoryboard x:Name="showNeed64BitJava_BeginStoryboard1" Storyboard="{StaticResource showNeed64BitJava}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="cbxShow64JavaInfo">
+            <BeginStoryboard x:Name="HideNeed64Java_BeginStoryboard1" Storyboard="{StaticResource HideNeed64Java}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxShowNoJava">
+            <BeginStoryboard x:Name="ShowNoJava_BeginStoryboard1" Storyboard="{StaticResource ShowNoJava}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="cbxShowNoJava">
+            <BeginStoryboard x:Name="HideNoJava_BeginStoryboard1" Storyboard="{StaticResource HideNoJava}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxShowNoLaunch">
+            <BeginStoryboard x:Name="ShowNoLaunch_BeginStoryboard1" Storyboard="{StaticResource ShowNoLaunch}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="cbxShowNoLaunch">
+            <BeginStoryboard x:Name="HideNoLaunch_BeginStoryboard1" Storyboard="{StaticResource HideNoLaunch}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxAniLogin">
+            <BeginStoryboard x:Name="ShowTabLogin_BeginStoryboard4" Storyboard="{StaticResource ShowTabLogin}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxShowUpdateInfo">
+            <BeginStoryboard x:Name="showUpdateInfo_BeginStoryboard1" Storyboard="{StaticResource showUpdateInfo}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="cbxShowOnlinePlayers">
+            <BeginStoryboard x:Name="showOnlinePlayers_BeginStoryboard1" Storyboard="{StaticResource showOnlinePlayers}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="cbxShowOnlinePlayers">
+            <BeginStoryboard x:Name="hideOnlinePlayers_BeginStoryboard1" Storyboard="{StaticResource hideOnlinePlayers}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Window.BorderBrush>
+        <LinearGradientBrush EndPoint="1.005,1.002" StartPoint="-0.003,0.003">
+            <GradientStop Color="Black" Offset="0.862"/>
+            <GradientStop Color="#FF74FF00" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.BorderBrush>
+    <Grid MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="44*"/>
+            <RowDefinition Height="98*"/>
+            <RowDefinition Height="240*"/>
+            <RowDefinition Height="42*"/>
+            <RowDefinition Height="33*"/>
+        </Grid.RowDefinitions>
+
+        <TabControl x:Name="TabCtrl" HorizontalAlignment="Left" Height="415" Margin="0,10,0,0" VerticalAlignment="Top" Width="448" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" Grid.Row="1" Grid.RowSpan="5" Padding="0">
+            <TabItem x:Name="tabAbout" Header="關於" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Black" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Margin="-2,-8.001,0,0" Height="10.823">
+                <Grid x:Name="TabAboutGrid" Margin="0,0,0,0.76" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Label x:Name="label" Content="PI Minecraft Launcher" Margin="0,172.142,0,0" VerticalAlignment="Top" FontSize="21.333" HorizontalContentAlignment="Center" FontWeight="Bold">
+                        <Label.Effect>
+                            <DropShadowEffect ShadowDepth="2" BlurRadius="4" Direction="270"/>
+                        </Label.Effect>
+                        <Label.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF292929" Offset="0.496"/>
+                                <GradientStop Color="#FFA4A4A4"/>
+                                <GradientStop Color="Black" Offset="0.504"/>
+                                <GradientStop Color="#FF5D5D5D" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Label.Foreground>
+                    </Label>
+                    <Label x:Name="txtAboutVersion" Content="Minecraft 1.6.4 | 版本：20140223.1&#xA;啟動器版本：4.0.0 (20140223)&#xA;" Margin="0,211.235,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF53B800" HorizontalContentAlignment="Center" Height="45.72"/>
+                    <Image Height="170" Margin="134,5,134,0" VerticalAlignment="Top" Source="minecraftico_256.png"/>
+                    <Label x:Name="label1" Content="遊戲伺服器架設：Power Li&#xA;啟動器設計：iSuper PC、Power Li" Margin="0,253.955,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Background="{x:Null}" Foreground="#FF000001"/>
+                    <Label x:Name="label2" Content="(C)2014-2015 iSuper PC &amp; Power Li. 版權所有，保留所有權利。" Margin="0,341.195,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Height="24.565" Foreground="Gray"/>
+                    <Image x:Name="imgFacebook" Height="35" Margin="201,301.435,202,0" VerticalAlignment="Top" Source="fb_icon_325x325.png" Cursor="Hand" MouseDown="imgFacebook_Click"/>
+                    <Border x:Name="bdrUpdateInfo" BorderThickness="1" Height="365.76" Margin="35,14,35,0" VerticalAlignment="Top" Background="White" Visibility="Collapsed">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <Border.BorderBrush>
+                            <LinearGradientBrush EndPoint="0.989,0.99" StartPoint="0.022,0.03">
+                                <GradientStop Color="Black" Offset="0.775"/>
+                                <GradientStop Color="#FF3AFF00" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="57*"/>
+                                <RowDefinition Height="38*"/>
+                                <RowDefinition Height="269*"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="正在下載並安裝更新" HorizontalAlignment="Left" Width="376" FontSize="16" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,19.006" Padding="0"/>
+                            <Border BorderThickness="0,1" HorizontalAlignment="Left" Height="37.79" Grid.Row="1" VerticalAlignment="Top" Width="376" BorderBrush="#FF008B00">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.013,0.975" StartPoint="1.015,-0.049">
+                                        <GradientStop Color="#FF00511A" Offset="1"/>
+                                        <GradientStop Color="#FF008F2D"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Grid>
+                                    <Label x:Name="txtOldVersion" Content="目前版本：20140223.1" HorizontalAlignment="Left" Height="35.79" Margin="24,0,0,0" VerticalAlignment="Top" Width="142" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Padding="0,5" Foreground="White"/>
+                                    <Label Content="8" Height="35.79" Margin="166,0,180,0" VerticalAlignment="Top" FontFamily="Webdings" FontSize="32" Padding="0" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                    <Label x:Name="txtNewVersion" Content="新版本：20140702.1" HorizontalAlignment="Left" Height="35.79" Margin="199,0,0,0" VerticalAlignment="Top" Width="167" VerticalContentAlignment="Center" Padding="0,5" Foreground="White" FontSize="16"/>
+                                </Grid>
+                            </Border>
+                            <Label Content="本次更新重點" HorizontalAlignment="Left" Height="30" Grid.Row="2" VerticalAlignment="Top" Width="376" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="14.667" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="請靜待更新安裝完成，本程式會自動重新啟動" HorizontalAlignment="Left" Width="376" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,37.956,0,0" Padding="0" Background="#FFCFCFCF" Height="19.003" VerticalAlignment="Top"/>
+                            <TextBlock x:Name="txtUpdateInfo" HorizontalAlignment="Center" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Center" Padding="2,3,3,3" MaxWidth="376" MaxHeight="238.823"><Run Language="zh-tw" Text="更新詳細資訊"/></TextBlock>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabSetting" Header="設定" BorderBrush="{x:Null}" Background="{x:Null}" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="13" Height="10.822" Margin="0,-6.125,0,0">
+                <Grid x:Name="TabSettingGird" Margin="0,3,0,-3" RenderTransformOrigin="0.5,0.5">
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                            <GradientStop Offset="0.224"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Border x:Name="bdrSettingMem" BorderThickness="1" HorizontalAlignment="Left" Height="109.76" Margin="10,10,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Opacity="0.495" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <Grid Margin="-1,0,0,0">
+                            <Label Content="記憶體用量限制" HorizontalAlignment="Left" Height="33.76" VerticalAlignment="Top" Width="427" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="0.996"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="最多不超過" HorizontalAlignment="Left" Margin="10,41.92,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001"/>
+                            <Slider x:Name="sldMem" HorizontalAlignment="Left" Margin="85,45.92,0,0" VerticalAlignment="Top" Width="250" Foreground="Black" SmallChange="512" TickFrequency="512" Minimum="512" Maximum="8192" Ticks="512,1024,1536,2048,2600,3072,3584,4096,4608,5120,5632,6144,6656,7148,7660,8192"  AutoToolTipPlacement="None" IsSnapToTickEnabled="True" Value="{Binding Text, ElementName=edtMem}"/>
+                            <TextBox x:Name="edtMem" HorizontalAlignment="Left" Height="25.24" Margin="335,41.92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="56" FontSize="12" BorderBrush="Black" VerticalContentAlignment="Center" Background="#FFFFFFFE" Foreground="#FF000001" TextChanged="edtMem_TextChanged" HorizontalContentAlignment="Right" Text="1024"/>
+                            <Label Content="MB" HorizontalAlignment="Left" Margin="394,41.92,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001"/>
+                            <Label Content="記憶體用量超過 2048 MB 可能不適合您的電腦，若出現問題請嘗試將低。" Height="30.76" VerticalAlignment="Top" Margin="0,72.16,-17,0" Background="{x:Null}" Foreground="Red" HorizontalContentAlignment="Center" FontSize="12"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="bdrSettingJavaEnv" BorderThickness="1" HorizontalAlignment="Left" Height="145" Margin="10,124.76,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Opacity="0.495" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="Java 執行環境" HorizontalAlignment="Left" Height="33.76" VerticalAlignment="Top" Width="427" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0,0,0,1" Margin="0,0,-1,0">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="0.996"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <RadioButton x:Name="rdbAutoScanJava" Content="自動選擇(建議選項)(_T)" HorizontalAlignment="Left" Margin="14,47,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001" Click="rdbAutoScanJava_Click"/>
+                            <RadioButton x:Name="rdbBrowseJava" Content="指定 Java 執行檔位置(_C)" HorizontalAlignment="Left" Margin="14,66.24,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001" Click="rdbBrowseJava_Click"/>
+                            <TextBox x:Name="edtJavaPath" HorizontalAlignment="Left" Height="23.2" Margin="14,84.48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="402" FontSize="12" BorderBrush="Black" VerticalContentAlignment="Center" Background="#FFFFFFFE" Foreground="#FF000001" TextChanged="edtJavaPath_TextChanged"/>
+                            <Button x:Name="btnBrowseJava" Content="瀏覽(_B)..." HorizontalAlignment="Left" Margin="341,110.68,0,0" VerticalAlignment="Top" Width="75" FontSize="12" Background="#FF138F00" Foreground="White" BorderBrush="{x:Null}" Height="26.32" Style="{DynamicResource ButtonStyle_Main}" Click="btnBrowseJava_Click"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="bdrSettingVisual" BorderThickness="1" HorizontalAlignment="Left" Height="110" Margin="10,274.76,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Opacity="0.495" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="遊戲外觀設定" HorizontalAlignment="Left" Height="33.76" VerticalAlignment="Top" Width="427" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0,0,0,1" Margin="0,0,-1,0">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="0.996"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="遊戲視窗解析度：" HorizontalAlignment="Left" Margin="10,38.76,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001"/>
+                            <RadioButton x:Name="rdbDefaultResolution" Content="預設(_D)" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001" Click="rdbDefaultResolution_Click"/>
+                            <RadioButton x:Name="rdbCustomResolution" Content="指定視窗解析度(_R)" HorizontalAlignment="Left" Margin="10,83.24,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001" Click="rdbCustomResolution_Click"/>
+                            <TextBox x:Name="edtResolutionX" HorizontalAlignment="Left" Height="21.76" Margin="136.407,79.24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="54" FontSize="12" BorderBrush="Black" VerticalContentAlignment="Center" Foreground="#FF000001" Background="#FFFFFFFE" TextChanged="edtResolutionX_TextChanged" HorizontalContentAlignment="Center"/>
+                            <Label Content="X" HorizontalAlignment="Left" Margin="193.407,77.24,0,0" VerticalAlignment="Top" FontSize="12" Foreground="#FF000001"/>
+                            <TextBox x:Name="edtResolutionY" HorizontalAlignment="Left" Height="21.76" Margin="215,79.24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="54" FontSize="12" BorderBrush="Black" VerticalContentAlignment="Center" Background="#FFFFFFFE" Foreground="#FF000001" TextChanged="edtResolutionY_TextChanged" HorizontalContentAlignment="Center"/>
+                            <Button x:Name="btnPlugin" Content="安裝附加元件(_P)" HorizontalAlignment="Left" Height="33.32" Margin="307.167,56.013,0,0" VerticalAlignment="Top" Width="108.833" FontSize="12" Foreground="White" BorderBrush="{x:Null}" Background="#FF001EA2" Click="btnPlugin_Click" Style="{DynamicResource ButtonStyle_Main}" Visibility="Hidden"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabLogin" Header="登入" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,0,0" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Height="10.823">
+                <Grid x:Name="TabLoginGrid" Margin="0,3,0,-3" RenderTransformOrigin="0.5,0.5">
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Gainsboro" Offset="0"/>
+                            <GradientStop Offset="0.138"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Border x:Name="bdrMinecraftLogin" BorderThickness="1" HorizontalAlignment="Left" Margin="10,10,0,0" Width="428" Background="White" Height="169.9" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Direction="0" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid HorizontalAlignment="Left" Height="168.9" Margin="-1,-1,-1,0" VerticalAlignment="Top" Width="424">
+                            <Label Content="登入 Minecraft" VerticalAlignment="Top" FontSize="18.667" HorizontalContentAlignment="Center" Foreground="#FF000001" Margin="0,0.427,0,0" Height="40.48" VerticalContentAlignment="Center" Background="{x:Null}" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1.001,0.698" StartPoint="0.001,0.63">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <CheckBox x:Name="cbxAutoLogin" Content="自動登入" HorizontalAlignment="Left" Margin="180.667,143.801,0,0" VerticalAlignment="Top" TabIndex="4" Foreground="#FF000001" Width="76.229"/>
+                            <Button x:Name="btnLogin" Content="使用Facebook登入" HorizontalAlignment="Left" Height="37.862" Margin="97.895,75.703,0,0" Style="{DynamicResource ButtonStyle_Main}" VerticalAlignment="Top" Width="245" Foreground="White" IsDefault="True" Click="btnLogin_Click" TabIndex="5"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="bdrLoginSignUp" BorderThickness="1" HorizontalAlignment="Left" Height="59.62" Margin="10,191.9,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="或許您還沒有帳戶，請立即" HorizontalAlignment="Left" Margin="84,15.88,0,0" VerticalAlignment="Top" Foreground="#FF000001"/>
+                            <Button x:Name="btnJoin" Content="申請會員(_G)" HorizontalAlignment="Left" Margin="238,10,0,0" VerticalAlignment="Top" Width="90" BorderBrush="{x:Null}" Background="#FFBD4D00" Foreground="White" Height="37" Click="btnJoin_Click" Style="{DynamicResource ButtonStyle_Main}" IsEnabled="False"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="bdrLoginOffline" BorderThickness="1" HorizontalAlignment="Left" Height="114.24" Margin="10,265.52,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="或者您目前沒有網路連線，或是伺服器異常，您可以" Margin="0,10,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Foreground="#FF000001"/>
+                            <Button x:Name="btnOfflineLaunch" Content="以離線模式進行單人遊戲(_F)" Margin="101,38.24,101,0" VerticalAlignment="Top" Height="35" Background="#FF005DFF" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle_Main}" Click="btnOfflineLaunch_Click"/>
+                            <Label Content="注意：玩家 ID 將強制設定為 Offline__Player，您將無法進入遊戲伺服器" Margin="0,77,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="bdrNoConnection" BorderBrush="White" BorderThickness="1" HorizontalAlignment="Left" Height="241.52" Margin="10,10,0,0" VerticalAlignment="Top" Width="427" Background="White" Visibility="Collapsed">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Direction="270" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="無法連線至伺服器" HorizontalAlignment="Left" Height="54" VerticalAlignment="Top" Width="425" FontSize="18.667" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="0.001,1.014" StartPoint="1.005,0.996">
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="#00000000"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Button x:Name="btnRefresh" Content="重試連線(_R)" HorizontalAlignment="Center" Height="32.76" Margin="144.5,199.76,144.5,0" VerticalAlignment="Top" Width="80" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnRefresh_Click"/>
+                            <TextBlock HorizontalAlignment="Left" Height="125" Margin="31,69.76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="349" Foreground="#FF001E51"><Run Text="請依序檢查："/><LineBreak/><Run/><LineBreak/><Run Text="1. 您的網路連線是否正常？"/><LineBreak/><Run Text="2. 您的防火牆是否已封鎖本程式的連線？"/><LineBreak/><Run/><LineBreak/><Run Text="以上問題若已排除，請"/><Run Text="按一下"/><Run Language="zh-tw" Text="「重試連線(R)」。"/><LineBreak/><Run Text="如果還是有問題請聯絡站長協助處理。"/></TextBlock>
+                            <Image HorizontalAlignment="Left" Height="32" Margin="10,12,0,0" VerticalAlignment="Top" Width="30" Source="i-logo-256.png"/>
+                            <Image HorizontalAlignment="Left" Height="100" Margin="315,94.76,0,0" VerticalAlignment="Top" Width="100" Source="Disconnected.png" Opacity="0.995"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabIMessage" Header="通訊" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,0,0" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="13" Height="10.823">
+                <Grid x:Name="TabMessageGrid" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="347*"/>
+                        <RowDefinition Height="43*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Button x:Name="btnIMSubmit" Content="送出" HorizontalAlignment="Left" Margin="374,10,0,0" VerticalAlignment="Top" Width="64" Height="27" BorderBrush="{x:Null}" Background="#FF000F70" Foreground="White" IsDefault="True" Style="{DynamicResource ButtonStyle_Main}" Click="btnIMSubmit_Click" Grid.Row="1"/>
+                    <TextBlock x:Name="txtIMessenger" Margin="10,19,10,5.003" TextWrapping="Wrap" Foreground="#FF000001" MouseDown="txtIMessenger_MouseDown"><Run Language="zh-tw" Text="[User1] Message1"/><LineBreak/><Run Language="zh-tw" Text="[User2] Message2"/><LineBreak/><Run Language="zh-tw"/></TextBlock>
+                    <TextBox x:Name="edtIM" HorizontalAlignment="Left" Margin="7,10,0,0" TextWrapping="Wrap" Width="362" BorderThickness="1,0,1,1" VerticalContentAlignment="Center" Foreground="#FF000001" Height="27" VerticalAlignment="Top" Grid.Row="1">
+
+                        <TextBox.Style>
+                            <Style xmlns:sys="clr-namespace:System;assembly=mscorlib" TargetType="{x:Type TextBox}">
+                                <Style.Resources>
+                                    <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                        <VisualBrush.Visual>
+                                            <Label Content="在此處輸入訊息..." Foreground="Gray" />
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </Style.Resources>
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                        <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="Text" Value="{x:Null}">
+                                        <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsKeyboardFocused" Value="True">
+                                        <Setter Property="Background" Value="White" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+
+                        <TextBox.BorderBrush>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="Black" Offset="1"/>
+                                <GradientStop Color="White"/>
+                            </LinearGradientBrush>
+                        </TextBox.BorderBrush>
+                    </TextBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabUserSettings" Header="使用者" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,0,0" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="19" Height="10.823">
+                <Grid x:Name="TabUserSettingGrid" RenderTransformOrigin="0.5,0.5">
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFC7C7C7" Offset="0.134"/>
+                            <GradientStop Offset="0.323"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Border x:Name="bdrUserTitle" BorderThickness="1" HorizontalAlignment="Left" Height="65.999" VerticalAlignment="Top" Width="450" Margin="-1,0">
+                        <Border.Background>
+                            <RadialGradientBrush RadiusY="1.666" RadiusX="0.729" GradientOrigin="-0.004,0.049" Center="0.016,0.087">
+                                <GradientStop Color="#FF19743A"/>
+                                <GradientStop Color="#FF0D4B1B" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Border.Background>
+                        <Grid>
+                            <Button x:Name="btnLogout" Content="登出(_O)" Margin="369,15.097,10,0" VerticalAlignment="Top" Background="#FF006670" BorderBrush="{x:Null}" Foreground="White" Height="31.806" Click="btnLogout_Click" Style="{DynamicResource ButtonStyle_Main}" RenderTransformOrigin="0.5,0.5">
+                                <Button.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </Button.RenderTransform>
+                            </Button>
+                            <TextBlock x:Name="txtWelcome" HorizontalAlignment="Left" Height="44.806" Margin="10,11.193,0,0" TextWrapping="Wrap" Text="歡迎您回來，USER" VerticalAlignment="Top" Width="354" FontSize="21.333" Foreground="White" RenderTransformOrigin="0.5,0.5">
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                    <TextBlock x:Name="txtCurrentId" HorizontalAlignment="Left" Height="18.761" Margin="10,38.238,0,0" TextWrapping="Wrap" Text="您的遊戲 ID 為：" VerticalAlignment="Top" Width="357" Foreground="#FFA2A2A2"/>
+                    <Border x:Name="border" BorderThickness="1" HorizontalAlignment="Left" Height="103" Margin="10,70.999,0,0" VerticalAlignment="Top" Width="428" Background="White">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Button x:Name="btnLaunchGame" Content="啟動遊戲(_L)" Margin="138,43.761,127,0" VerticalAlignment="Top" Background="#FF005908" Foreground="White" BorderBrush="{x:Null}" Height="50.239" Style="{DynamicResource ButtonStyle_Main}" Click="btnLaunchGame_Click" FontSize="18.667"/>
+                            <Label Content="開始遊玩 Minecraft" HorizontalAlignment="Left" Height="38.761" VerticalAlignment="Top" Width="426" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0.004"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                        <GradientStop Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="border1" BorderThickness="1" HorizontalAlignment="Left" Height="99.999" Margin="10,178.999,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="帳戶設定" HorizontalAlignment="Left" Height="38.761" VerticalAlignment="Top" Width="426" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0.004"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                        <GradientStop Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Button x:Name="btnChangeIdOrPasswd" Content="變更遊戲 I_D 或登入密碼" Margin="48,48.761,216,0" VerticalAlignment="Top" Height="34.24" Background="#FF550042" Foreground="White" BorderBrush="{x:Null}" Click="btnChangeIdOrPasswd_Click" Style="{DynamicResource ButtonStyle_Main}"/>
+                            <Button x:Name="btnRemoveAccount" Content="移除帳戶(_R)" Margin="215,48.761,49,0" VerticalAlignment="Top" Background="Red" BorderBrush="{x:Null}" Foreground="White" Height="34.24" Click="btnRemoveAccount_Click" Style="{DynamicResource ButtonStyle_Main}"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="border2" BorderThickness="1" HorizontalAlignment="Left" Height="102.999" Margin="10,283.998,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="遊戲角色外觀" HorizontalAlignment="Left" Height="38.761" VerticalAlignment="Top" Width="426" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0.004"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                        <GradientStop Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Button x:Name="btnChangeSkin" Content="上傳角色 Skin 圖片檔(_U)" Margin="132,43.761,132,0" VerticalAlignment="Top" Height="34.24" Background="#FF000F55" Foreground="White" BorderBrush="{x:Null}" Style="{DynamicResource ButtonStyle_Main}" Click="btnChangeSkin_Click"/>
+                            <Label Content="您可以自網路上搜尋 Minecraft 角色的 Skin 來套用變更" HorizontalAlignment="Left" Height="26.731" Margin="10,74.268,0,0" VerticalAlignment="Top" Width="406" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" Foreground="#FF575757"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabJoin" Header="加入" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,0,0" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="20" Height="10.823">
+                <Grid x:Name="TabJoinGrid" RenderTransformOrigin="0.5,0.5">
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                            <GradientStop Offset="0.224"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Border x:Name="bdrJoinTitle" BorderThickness="1" HorizontalAlignment="Left" Height="151" Margin="10,10,0,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.495"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="帳戶基本資訊" Height="38" VerticalAlignment="Top" FontSize="18.667" HorizontalContentAlignment="Center" Foreground="#FF000001" VerticalContentAlignment="Center" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1.007,0.493" StartPoint="0,0.474">
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                        <GradientStop Offset="0.991"/>
+                                        <GradientStop Color="#01FFFFFF"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <TextBox x:Name="edtJoinUsername" Height="23" Margin="155,47,67,0" TextWrapping="Wrap" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" TabIndex="10" BorderBrush="Black" IsEnabled="False"/>
+                            <PasswordBox x:Name="pwdJoinPasswd" Margin="155,80,67,0" VerticalAlignment="Top" Height="23" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" TabIndex="11" BorderBrush="Black" IsEnabled="False"/>
+                            <PasswordBox x:Name="pwdJoinPasswdConf" Margin="155,113.813,67,0" VerticalAlignment="Top" Height="23" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" TabIndex="12" BorderBrush="Black" IsEnabled="False"/>
+                            <Label Content="使用者名稱：" HorizontalAlignment="Left" Height="23" Margin="73,47,0,0" VerticalAlignment="Top" Width="81" Foreground="#FF000001"/>
+                            <Label Content="密碼：" HorizontalAlignment="Left" Height="23" Margin="109,80,0,0" VerticalAlignment="Top" Width="41" Foreground="#FF000001"/>
+                            <Label Content="確認密碼：" HorizontalAlignment="Left" Height="23" Margin="84,113.813,0,0" VerticalAlignment="Top" Width="66" Foreground="#FF000001"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="bdrJoinOther" BorderThickness="1" HorizontalAlignment="Right" Height="214.76" Margin="0,169,10,0" VerticalAlignment="Top" Width="428" Background="White" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.495"/>
+                        </Border.Effect>
+                        <Grid>
+                            <TextBox x:Name="edtJoinEmail" Height="23" Margin="116,43,30,0" TextWrapping="Wrap" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" TabIndex="13" BorderBrush="Black" IsEnabled="False"/>
+                            <TextBox x:Name="edtJoinId" Height="23" Margin="155,107.24,67,0" TextWrapping="Wrap" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" LostFocus="edtJoinId_LostFocus" TabIndex="14" BorderBrush="Black"/>
+                            <Label Content="Facebook ID：" HorizontalAlignment="Left" Height="23" Margin="14,43,0,0" VerticalAlignment="Top" Width="101" Foreground="#FF000001" RenderTransformOrigin="0.5,0.5"/>
+                            <Label Content="遊戲 ID：" HorizontalAlignment="Left" Height="23" Margin="92,106.76,0,0" VerticalAlignment="Top" Width="58" Foreground="#FF000001"/>
+                            <Button x:Name="btnJoinSubmit" Content="加入(_J)" Margin="96,165.52,214,0" VerticalAlignment="Top" Height="38.24" Background="#FF006E00" BorderBrush="{x:Null}" Foreground="White" Click="btnJoinSubmit_Click" Style="{DynamicResource ButtonStyle_Main}" IsDefault="True" TabIndex="15"/>
+                            <Button x:Name="btnCancelJoin" Content="取消" Margin="214,165.52,96,0" VerticalAlignment="Top" Height="38.24" Background="#FFBD6700" BorderBrush="{x:Null}" Foreground="White" Click="btnCancelJoin_Click" Style="{DynamicResource ButtonStyle_Main}"/>
+                            <Label Content="遊戲相關資訊" Height="38" VerticalAlignment="Top" FontSize="18.667" HorizontalContentAlignment="Center" Foreground="#FF000001" VerticalContentAlignment="Center" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1.007,0.493" StartPoint="0,0.474">
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                        <GradientStop Offset="0.991"/>
+                                        <GradientStop Color="#01FFFFFF"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="請提供您的 Facebook 個人動態時報網址，以便我們驗證您的身分" HorizontalAlignment="Left" Height="30.76" Margin="0,71,0,0" VerticalAlignment="Top" Width="426" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FF7E7E7E" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1.002,0.467" StartPoint="0,0.43">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="請設定一個 ID 作為遊戲中的化名，ID 不接受空白字元" HorizontalAlignment="Left" Height="28.28" Margin="0,130.24,0,0" VerticalAlignment="Top" Width="426" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderThickness="0,0,0,1" Background="{x:Null}" Foreground="#FF6A6A6A">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,0.495" StartPoint="-0.001,0.497">
+                                        <GradientStop Color="#05FFFFFF" Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabPlugin" Header="元件" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,0,0" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="21" Height="10.823">
+                <Grid>
+                    <ListView x:Name="lsvPlugin" HorizontalAlignment="Left" Height="282" Margin="10,44.76,0,0" VerticalAlignment="Top" Width="424" Background="#FFFFFFFE" Foreground="#FF000001">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn/>
+                            </GridView>
+                        </ListView.View>
+                        <CheckBox Content="PowerLi 推薦遊戲字型"/>
+                        <CheckBox Content="Java (32 位元)"/>
+                        <CheckBox Content="Java (64 位元)"/>
+                    </ListView>
+                    <Button x:Name="btnPluginInstall" Content="安裝" Height="38" Margin="175,341.76,174,0" VerticalAlignment="Top" Background="#FF00A8A0" Foreground="White" BorderBrush="White" Style="{DynamicResource ButtonStyle_Main}" Click="btnPluginInstall_Click" IsDefault="True"/>
+                    <Label Content="附加元件" Height="39.76" VerticalAlignment="Top" FontSize="24" HorizontalContentAlignment="Center" Background="{x:Null}" Foreground="#FF000001"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabChange" Header="變更" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,0,0" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="19" Height="10.823">
+                <Grid>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="WhiteSmoke" Offset="0"/>
+                            <GradientStop Offset="0.194"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Button x:Name="btnChangeSave" Content="儲存(_S)" Margin="105,345.52,210.582,0" VerticalAlignment="Top" Height="38.24" Background="#FF006E00" BorderBrush="{x:Null}" Foreground="White" Click="btnChangeSave_Click" Style="{DynamicResource ButtonStyle_Main}" IsDefault="True"/>
+                    <Button x:Name="btnCancelChange" Content="取消" Margin="242.418,345.52,106,0" VerticalAlignment="Top" Height="38.24" Background="#FFBD6700" BorderBrush="{x:Null}" Foreground="White" Click="btnCancelChange_Click" Style="{DynamicResource ButtonStyle_Main}"/>
+                    <Border x:Name="bdrChangeOld" BorderThickness="1" HorizontalAlignment="Left" Height="79" Margin="10,10,0,0" VerticalAlignment="Top" Width="428" Background="White">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.495"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="請先輸入舊密碼來驗證" Height="32" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" Foreground="#FF000001" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="原始密碼(必填)：" HorizontalAlignment="Left" Height="23" Margin="42,42.028,0,0" VerticalAlignment="Top" Width="101" Background="{x:Null}" Foreground="Red"/>
+                            <PasswordBox x:Name="pwdChangeOldPasswd" Margin="143,42.028,79,0" VerticalAlignment="Top" Height="23" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" BorderBrush="Black" IsEnabled="False"/>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="bdrChangePasswd" BorderThickness="1" HorizontalAlignment="Left" Height="129.24" Margin="10,98,0,0" VerticalAlignment="Top" Width="428" Background="White">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.495"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="變更密碼" Height="32" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" Foreground="#FF000001" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <PasswordBox x:Name="pwdChangeNewPasswd" Margin="145,60,77,0" VerticalAlignment="Top" Height="23" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" BorderBrush="Black" IsEnabled="False"/>
+                            <PasswordBox x:Name="pwdChangeNewConfirmPasswd" Margin="145,88,77,0" VerticalAlignment="Top" Height="23" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" BorderBrush="Black" IsEnabled="False"/>
+                            <Label Content="新密碼：" HorizontalAlignment="Left" Height="23" Margin="83,60,0,0" VerticalAlignment="Top" Width="57" Foreground="Black"/>
+                            <Label Content="確認密碼：" HorizontalAlignment="Left" Height="23" Margin="74,88,0,0" VerticalAlignment="Top" Width="66" Foreground="Black"/>
+                            <Label Content="如果不想變更密碼，則不需要填寫新密碼及確認密碼。" Height="27" Margin="0,32,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF858585" HorizontalContentAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <Border BorderThickness="1" HorizontalAlignment="Left" Height="95.24" Margin="10,238.28,0,0" VerticalAlignment="Top" Width="428" Background="White">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.495"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label x:Name="bdrChangeId" Content="變更遊戲 ID" Height="32" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" Foreground="#FF000001" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <TextBox x:Name="edtChangeNewId" Height="23" Margin="146,59,76,0" TextWrapping="Wrap" VerticalAlignment="Top" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" LostFocus="edtChangeNewId_LostFocus" BorderBrush="Black"/>
+                            <Label Content="遊戲 ID：" HorizontalAlignment="Left" Height="23" Margin="83,59,0,0" VerticalAlignment="Top" Width="58" Foreground="Black"/>
+                            <Label Content="如果不想變更遊戲 ID，則不需要填寫下方欄位。" Height="27" Margin="1,32,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FF646464" HorizontalContentAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabTest" Header="test" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,-6.057,16.667" IsTabStop="False">
+                <Grid>
+                    <Button x:Name="btnTestOnline" Content="TestOnline" HorizontalAlignment="Left" Height="37" Margin="156,49,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestOnline_Click"/>
+                    <Button x:Name="btnTestOffline" Content="TestOffline" HorizontalAlignment="Left" Height="37" Margin="156,91,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestOffline_Click"/>
+                    <Button x:Name="btnTestDownload" Content="TestUpdate" HorizontalAlignment="Left" Height="37" Margin="156,175,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestDownload_Click"/>
+                    <CheckBox x:Name="cbxAniShowTabUserSettings" Content="ShowTabUserSettings" HorizontalAlignment="Left" Height="18" Margin="10,343.76,0,0" VerticalAlignment="Top" Width="152" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxAniShowTitleStatus" Content="ShowTitleStatus" HorizontalAlignment="Left" Height="18" Margin="10,361.76,0,0" VerticalAlignment="Top" Width="152" Visibility="Hidden"/>
+                    <Button x:Name="btnTestTitleStatus" Content="TestTitleStatus" HorizontalAlignment="Left" Height="37" Margin="156,217,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestTitleStatus_Click"/>
+                    <TextBox x:Name="edtStatusTitle" HorizontalAlignment="Left" Height="18" Margin="291,226.88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131.5" Text="EditTitleStatusHere" BorderBrush="Black"/>
+                    <CheckBox x:Name="cbxAniOnline" Content="AniOnline" HorizontalAlignment="Left" Height="18" Margin="167,343.76,0,0" VerticalAlignment="Top" Width="84" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxAniOffline" Content="AniOffline" HorizontalAlignment="Left" Height="18" Margin="256,343.76,0,0" VerticalAlignment="Top" Width="84" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxAniCheckingServer" Content="AniCheckServer" HorizontalAlignment="Left" Height="18" Margin="167,325.76,0,0" VerticalAlignment="Top" Width="173" Visibility="Hidden"/>
+                    <Label Content="注意，請不要刪除此頁面，此頁有UI運作的關鍵" Height="34" Margin="0,10,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Background="{x:Null}" Foreground="Red"/>
+                    <Button x:Name="btnTestCheckServer" Content="CheckServerUI" HorizontalAlignment="Left" Height="37" Margin="156,133,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestCheckServer_Click" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxStatusBarBlink" Content="StatusBarBlink" HorizontalAlignment="Left" Height="18" Margin="10,260.813,0,0" VerticalAlignment="Top" Width="121" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxStatusRed" Content="StatusRed" HorizontalAlignment="Left" Height="18" Margin="10,237.813,0,0" VerticalAlignment="Top" Width="84" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxStatusYellow" Content="StatusYellow" HorizontalAlignment="Left" Height="18" Margin="10,219.813,0,0" VerticalAlignment="Top" Width="97" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxStatusGreen" Content="StatusGreen" HorizontalAlignment="Left" Height="18" Margin="10,201.813,0,0" VerticalAlignment="Top" Width="97" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxStatusDownloading" Content="StatusDownloading" HorizontalAlignment="Left" Height="18" Margin="10,183.813,0,0" VerticalAlignment="Top" Width="97" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxNoConnection" Content="NoConnection" HorizontalAlignment="Left" Height="18" Margin="10,165.813,0,0" VerticalAlignment="Top" Width="97" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbxShowMsg" Content="ShowMsg" HorizontalAlignment="Left" Height="18" Margin="10,147.813,0,0" VerticalAlignment="Top" Width="97" Visibility="Hidden"/>
+                    <Button x:Name="btnTestNoJava" Content="TestNoJava" HorizontalAlignment="Left" Height="37" Margin="156,289.88,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestNoJava_Click"/>
+                    <Button x:Name="btnTestNeed64Java" Content="TesNeed64Java" HorizontalAlignment="Left" Height="37" Margin="156,331.88,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestNeed64Java_Click"/>
+                    <CheckBox x:Name="cbxShowEULA" Content="ShowEULA" HorizontalAlignment="Left" Height="18" Margin="10,129.813,0,0" VerticalAlignment="Top" Width="97" Visibility="Hidden"/>
+                    <Button x:Name="btnTestLoginFailed" Content="TestLoginFailed" HorizontalAlignment="Left" Height="37" Margin="292.5,49,0,0" VerticalAlignment="Top" Width="130" Style="{DynamicResource ButtonStyle_Main}" Click="btnTestLoginFailed_Click"/>
+                    <CheckBox x:Name="cbxShow64JavaInfo" Content="Show64JavaInfo" HorizontalAlignment="Left" Height="18" Margin="10,49,0,0" VerticalAlignment="Top" Width="121"/>
+                    <CheckBox x:Name="cbxShowNoJava" Content="ShowNoJava" HorizontalAlignment="Left" Height="18" Margin="10,67,0,0" VerticalAlignment="Top" Width="121"/>
+                    <CheckBox x:Name="cbxShowNoLaunch" Content="ShowNoLaunch" HorizontalAlignment="Left" Height="18" Margin="10,85,0,0" VerticalAlignment="Top" Width="121"/>
+                    <CheckBox x:Name="cbxAniLogin" Content="AniLogin" HorizontalAlignment="Left" Height="18" Margin="10,124.813,0,0" VerticalAlignment="Top" Width="121"/>
+                    <CheckBox x:Name="cbxShowUpdateInfo" Content="ShowUpdateInfo" HorizontalAlignment="Left" Height="18" Margin="10,103,0,0" VerticalAlignment="Top" Width="121"/>
+                    <CheckBox x:Name="cbxHideMsg" Content="HideMsg" HorizontalAlignment="Left" Height="18" Margin="10,175,0,0" VerticalAlignment="Top" Width="121"/>
+                    <CheckBox x:Name="cbxShowOnlinePlayers" Content="ShowOnlinePlayers" HorizontalAlignment="Left" Height="18" Margin="10,194,0,0" VerticalAlignment="Top" Width="121"/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="tabRemove" Header="變更" BorderBrush="{x:Null}" Background="{x:Null}" Margin="-2,-7.251,0,0" IsTabStop="False" HorizontalAlignment="Left" VerticalAlignment="Top" Width="19" Height="10.823">
+                <Grid>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                            <GradientStop Offset="0.241"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Border BorderThickness="1" HorizontalAlignment="Left" Height="113.788" Margin="10,10,0,0" VerticalAlignment="Top" Width="428" Background="White">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.495"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="請先輸入密碼來驗證" Height="33" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" Foreground="#FF000001" VerticalContentAlignment="Center" Background="Transparent" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Color="#00000000" Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="原始密碼(必填)：" HorizontalAlignment="Left" Height="23" Margin="58,59.788,0,0" VerticalAlignment="Top" Width="105" Background="{x:Null}" Foreground="Red"/>
+                            <PasswordBox x:Name="pwdRemovePasswd" Margin="163,59.788,59,0" VerticalAlignment="Top" Height="23" BorderThickness="0,0,0,1" Background="#FFFFFFFE" Foreground="#FF000001" BorderBrush="Black"/>
+                        </Grid>
+                    </Border>
+                    <Border BorderThickness="1" HorizontalAlignment="Left" Height="192.972" Margin="10,128.788,0,0" VerticalAlignment="Top" Width="428" Background="White">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.495"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Label Content="移除帳戶" Height="33" VerticalAlignment="Top" FontSize="16" HorizontalContentAlignment="Center" Foreground="#FF000001" VerticalContentAlignment="Center" Background="Transparent" BorderThickness="0,0,0,1">
+                                <Label.BorderBrush>
+                                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                                        <GradientStop Color="#00000000" Offset="0"/>
+                                        <GradientStop Offset="1"/>
+                                        <GradientStop Color="Black" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Label.BorderBrush>
+                            </Label>
+                            <Label Content="警告：移除帳戶後，您的資料與遊戲進度將全數流失。&#xA;如果您確定不再遊玩本遊戲，請按下「移除」鈕。" Height="51.76" Margin="0,38,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="Red" HorizontalContentAlignment="Center" FontSize="16"/>
+                            <Button x:Name="btnRemoveConf" Content="移除(_R)" Margin="155,94.76,155,0" VerticalAlignment="Top" Height="38.24" Background="#FF006E00" BorderBrush="{x:Null}" Foreground="White" Click="btnRemoveConf_Click" Style="{DynamicResource ButtonStyle_Main}" IsDefault="True"/>
+                            <Button x:Name="btnCancelRemove" Content="取消" Margin="155,138,155,0" VerticalAlignment="Top" Height="38.24" Background="#FFBD6700" BorderBrush="{x:Null}" Foreground="White" Click="btnCancelChange_Click" Style="{DynamicResource ButtonStyle_Main}"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Border x:Name="bdrStatusBar" HorizontalAlignment="Left" Height="32.947" Margin="0,0.053,-0.001,0" Grid.Row="5" VerticalAlignment="Top" Width="448.001" Background="White">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0" Direction="0" Opacity="0.25"/>
+            </Border.Effect>
+            <Image x:Name="imgOnline" Margin="341.001,0,87.001,0" Source="online.png" MouseDown="imgOnline_Click"/>
+        </Border>
+
+        <Label Content="PowerLi Minecraft Server" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="21.333" Margin="59,10,0,0" Height="37.093" Width="258.983" Foreground="#FF000001"/>
+        <Label x:Name="txtTitleVersion" Content="Minecraft 1.6.4 | 版本：20140223.1" HorizontalAlignment="Left" Margin="60,38,0,0" VerticalAlignment="Top" Width="342" Foreground="#FF767676" Height="25.24">
+            <Label.BorderBrush>
+                <LinearGradientBrush EndPoint="0.822,0.515" StartPoint="0.825,0.634">
+                    <GradientStop Offset="0"/>
+                    <GradientStop Offset="1"/>
+                    <GradientStop Color="#FE686868" Offset="0.513"/>
+                </LinearGradientBrush>
+            </Label.BorderBrush>
+        </Label>
+        <Image HorizontalAlignment="Left" Height="48" Margin="10,13,0,0" VerticalAlignment="Top" Width="48" Source="minecraftico_48.png" Stretch="UniformToFill"/>
+        <Ellipse x:Name="icnServerStatus_checking" HorizontalAlignment="Left" Height="15" Margin="7,10,0,0" Grid.Row="5" VerticalAlignment="Top" Width="15" StrokeThickness="3" RenderTransformOrigin="0.5,0.5">
+            <Ellipse.Stroke>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" SpreadMethod="Repeat" StartPoint="0,0.5">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.75" CenterX="0.25" ScaleY="1.317" ScaleX="1.436"/>
+                            <SkewTransform CenterY="0.75" CenterX="0.25"/>
+                            <RotateTransform Angle="15.48" CenterY="0.75" CenterX="0.25"/>
+                            <TranslateTransform X="0.241" Y="-0.271"/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF008BFF"/>
+                    <GradientStop Color="White" Offset="0.422"/>
+                    <GradientStop Color="#FF008BFF" Offset="0.988"/>
+                    <GradientStop Color="#FF002566" Offset="0.402"/>
+                    <GradientStop Color="#FF002566" Offset="0.602"/>
+                    <GradientStop Color="#FEFFFFFF" Offset="0.59"/>
+                    <GradientStop Color="#FEFFF300" Offset="0.504"/>
+                </LinearGradientBrush>
+            </Ellipse.Stroke>
+            <Ellipse.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                </TransformGroup>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+        <Label x:Name="txtServerStatus_checking" Content="正在檢查網路連線..." HorizontalAlignment="Left" Margin="22,4,0,0" Grid.Row="5" VerticalAlignment="Top" Width="295.983" RenderTransformOrigin="0.5,0.5" Foreground="#FF000001" Height="25.24">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Image x:Name="imgRefresh" HorizontalAlignment="Left" Height="23" Margin="392,8,0,0" Grid.Row="5" VerticalAlignment="Top" Width="18" Source="refresh.png" Cursor="Hand" MouseDown="imgRefresh_Click"/>
+        <Image x:Name="imgAbout" HorizontalAlignment="Left" Height="26" Margin="416,4,0,0" Grid.Row="5" VerticalAlignment="Top" Width="26" Source="about.png" MouseDown="imgAbout_MouseDown" Cursor="Hand">
+            <Image.Effect>
+                <DropShadowEffect ShadowDepth="1"/>
+            </Image.Effect>
+        </Image>
+        <Border x:Name="bdrEULA" BorderThickness="1" HorizontalAlignment="Left" Height="413" Margin="7,1,0,0" VerticalAlignment="Top" Width="435" Background="White" Grid.Row="1" Grid.RowSpan="4" Opacity="0" Visibility="Collapsed">
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="0.996,0.996" StartPoint="0.01,0.011">
+                    <GradientStop Color="Black" Offset="0.817"/>
+                    <GradientStop Color="#FF74FF00" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Border.Effect>
+                <DropShadowEffect Opacity="0.94" ShadowDepth="0" Direction="275" BlurRadius="15"/>
+            </Border.Effect>
+            <Grid HorizontalAlignment="Left" Height="413" VerticalAlignment="Top" Width="428">
+                <Label Content="PowerLi Minecraft Server 使用規範" Height="43" VerticalAlignment="Top" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16"/>
+                <RichTextBox HorizontalAlignment="Left" Height="317" VerticalAlignment="Top" Width="408" Margin="10,43,0,0" BorderThickness="0,1" Padding="0,3" FontSize="16">
+                    <RichTextBox.BorderBrush>
+                        <LinearGradientBrush EndPoint="1.004,0.461" StartPoint="0.013,0.459">
+                            <GradientStop Color="Black" Offset="0.5"/>
+                            <GradientStop Offset="1"/>
+                            <GradientStop Color="#00000000"/>
+                        </LinearGradientBrush>
+                    </RichTextBox.BorderBrush>
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="1."/>
+                            <Run Language="zh-tw" Text=" "/>
+                            <Run Text="不可蓄意破壞伺服器。"/>
+                        </Paragraph>
+                        <Paragraph>
+                            <Run Text="2."/>
+                            <Run Language="zh-tw" Text=" "/>
+                            <Run Text="不可隨處潑灑岩漿、使用地形轉換機或是引爆炸彈，或是任意改造或破壞別人的機具，進而影響別人的虛擬財產(如農場、房屋、機具等)。"/>
+                        </Paragraph>
+                        <Paragraph>
+                            <Run Text="3."/>
+                            <Run Language="zh-tw" Text=" "/>
+                            <Run Text="不可任意拿走別人箱子裡的東西(公共場地、科技塔、生怪塔等不在此限)。"/>
+                        </Paragraph>
+                        <Paragraph>
+                            <Run Text="4."/>
+                            <Run Language="zh-tw" Text=" "/>
+                            <Run Text="不得開掛影響遊戲平衡。"/>
+                        </Paragraph>
+                        <Paragraph>
+                            <Run Language="zh-tw" Text="5. 不要熬夜玩 Minecraft 趕進度。"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <Button x:Name="btnJoinAgree" Content="我同意" HorizontalAlignment="Left" Height="38" Margin="96,367,0,0" VerticalAlignment="Top" Width="113" Foreground="White" BorderBrush="{x:Null}" Background="#FF006C0F" Style="{DynamicResource ButtonStyle_Main}" Click="btnJoinAgree_Click"/>
+                <Button x:Name="btnJoinDisagree" Content="我拒絕" HorizontalAlignment="Left" Height="38" Margin="214,367,0,0" VerticalAlignment="Top" Width="113" Foreground="White" BorderBrush="{x:Null}" Background="#FFB00000" Style="{DynamicResource ButtonStyle_Main}" Click="btnJoinDisagree_Agree"/>
+            </Grid>
+        </Border>
+        <Button x:Name="btnMinimize" Content="0" HorizontalAlignment="Left" Height="28" Margin="386,0,0,0" Style="{DynamicResource ButtonStyle_TitleButton}" VerticalAlignment="Top" Width="28" FontFamily="Webdings" FontSize="13.333" Click="btnMinimize_Click" Foreground="#FF000001"/>
+        <Button x:Name="btnClose" Content="r" HorizontalAlignment="Left" Height="28" Margin="418,0,0,0" Style="{DynamicResource ButtonStyle_TitleButton}" VerticalAlignment="Top" Width="28" FontFamily="Webdings" Click="btnClose_Click" Foreground="#FF000001"/>
+        <Button x:Name="btnTest" Content="測試功能" HorizontalAlignment="Left" Height="27" Margin="380,31,0,0" VerticalAlignment="Top" Width="58" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnTest_Click" Visibility="Hidden"/>
+        <Border x:Name="bdrMessage" BorderThickness="1" Margin="10,0,10,10" Background="White" Grid.Row="2" Grid.RowSpan="3" Visibility="Collapsed">
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="0.993,0.993" StartPoint="0.01,0.014">
+                    <GradientStop Color="Black" Offset="0.727"/>
+                    <GradientStop Color="#FF74FF00" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Border.Effect>
+                <DropShadowEffect Opacity="0.94" ShadowDepth="0" Direction="275" BlurRadius="14"/>
+            </Border.Effect>
+            <Grid HorizontalAlignment="Left" Height="413" VerticalAlignment="Top" Width="428">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48*"/>
+                    <RowDefinition Height="268*"/>
+                    <RowDefinition Height="97*"/>
+                </Grid.RowDefinitions>
+                <Label x:Name="txtMsgTitle" Content="PI Minecraft Launcher" Height="50" VerticalAlignment="Top" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" FontSize="16" VerticalContentAlignment="Center" Grid.RowSpan="2">
+                    <Label.BorderBrush>
+                        <LinearGradientBrush EndPoint="-0.007,0.999" StartPoint="1.007,0.972">
+                            <GradientStop Color="Black" Offset="0.5"/>
+                            <GradientStop Color="#01FFFFFF" Offset="0.991"/>
+                            <GradientStop Color="#00000000"/>
+                        </LinearGradientBrush>
+                    </Label.BorderBrush>
+                </Label>
+                <Button x:Name="btnMsgOK" Content="確定" Margin="156,10,159,49" Foreground="White" BorderBrush="{x:Null}" Background="#FF006C0F" Style="{DynamicResource ButtonStyle_Main}" Grid.Row="2" IsDefault="True" Click="btnMsgOK_Click"/>
+                <TextBlock x:Name="txtMsgContent" Margin="10,7,10,10" TextWrapping="Wrap" Text="Message" MaxWidth="408" MaxHeight="305" MinWidth="10" MinHeight="10" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="32" Source="i-logo-256.png" Margin="10,10,0,0"/>
+            </Grid>
+        </Border>
+        <Ellipse x:Name="icnServerStatus_Online" HorizontalAlignment="Left" Height="15" Margin="7,10,0,0" Grid.Row="5" VerticalAlignment="Top" Width="15" StrokeThickness="3" Opacity="0.005">
+            <Ellipse.Stroke>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FF474747" Offset="0.754"/>
+                    <GradientStop Color="#FF464646" Offset="0.974"/>
+                </RadialGradientBrush>
+            </Ellipse.Stroke>
+            <Ellipse.Fill>
+                <RadialGradientBrush GradientOrigin="0.269,0.262">
+                    <GradientStop Color="#FF97FF4E" Offset="0"/>
+                    <GradientStop Color="#FF50C300"/>
+                    <GradientStop Color="#FF307400" Offset="0.866"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Label x:Name="txtServerStatus_Online" Content="伺服器服務中" HorizontalAlignment="Left" Margin="22,43,0,-35.24" Grid.Row="5" VerticalAlignment="Top" Width="295.983" RenderTransformOrigin="0.5,0.5" Foreground="#FF000001" Height="25.24" Visibility="Collapsed">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Ellipse x:Name="icnServerStatus_Offline" HorizontalAlignment="Left" Height="15" Margin="7,9.813,0,0" Grid.Row="5" VerticalAlignment="Top" Width="15" StrokeThickness="3" Opacity="0">
+            <Ellipse.Stroke>
+                <RadialGradientBrush>
+                    <GradientStop Color="#FF474747" Offset="0.754"/>
+                    <GradientStop Color="#FF464646" Offset="0.974"/>
+                </RadialGradientBrush>
+            </Ellipse.Stroke>
+            <Ellipse.Fill>
+                <RadialGradientBrush GradientOrigin="0.269,0.262">
+                    <GradientStop Color="#FF97FF4E" Offset="0"/>
+                    <GradientStop Color="Red"/>
+                    <GradientStop Color="#FF740000" Offset="0.866"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Label x:Name="txtServerStatus_Offline" Content="無法連線至伺服器" HorizontalAlignment="Left" Margin="22,14.813,0,0" Grid.Row="4" VerticalAlignment="Top" Width="295.983" Opacity="0" RenderTransformOrigin="0.5,0.5" Foreground="#FF000001" Height="27" Visibility="Collapsed">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Border x:Name="bdrNoJava" BorderThickness="1" HorizontalAlignment="Left" Height="211" Margin="10,37.24,0,0" Grid.RowSpan="3" VerticalAlignment="Top" Width="428" Background="White" Grid.Row="1" Visibility="Collapsed">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="2" Direction="270" BlurRadius="16"/>
+            </Border.Effect>
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="0.987,0.978" StartPoint="0.026,0.027">
+                    <GradientStop Color="Black" Offset="0.745"/>
+                    <GradientStop Color="#FF68FF00" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Grid>
+                <Label Content="無法啟動遊戲" Height="43" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" BorderThickness="0,0,0,1">
+                    <Label.BorderBrush>
+                        <LinearGradientBrush EndPoint="0,0.99" StartPoint="1.001,0.991">
+                            <GradientStop Offset="0"/>
+                            <GradientStop Offset="1"/>
+                            <GradientStop Color="Black" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Label.BorderBrush>
+                </Label>
+                <TextBlock HorizontalAlignment="Left" Height="73.59" Margin="76,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"><Run Language="zh-tw" Text="我們找不到 Java 執行檔的路徑，無法啟動遊戲。"/><LineBreak/><Run Language="zh-tw" Text="若您尚未安裝 Java，請點選「安裝 Java」鈕來進行安裝。"/><LineBreak/><Run Language="zh-tw" Text="若您使用免安裝版本的 Java 環境，請按一下「設定 Java 路徑」，來設定遊戲執行的執行檔位置。"/></TextBlock>
+                <Image HorizontalAlignment="Left" Height="61.59" Margin="10,65,0,0" VerticalAlignment="Top" Width="61" Source="error.png">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="1"/>
+                    </Image.Effect>
+                </Image>
+                <Button x:Name="btnNoJavaInstall" Content="安裝 _Java" HorizontalAlignment="Left" Height="29" Margin="38,158.59,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnNoJavaInstall_Click"/>
+                <Button x:Name="btnNoJavaSelectPath" Content="設定 Java 路徑(_P)" HorizontalAlignment="Left" Height="29" Margin="161,158.59,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnNoJavaSelectPath_Click"/>
+                <Button x:Name="btnNoJavaCancel" Content="取消" HorizontalAlignment="Left" Height="29" Margin="302,158.59,0,0" VerticalAlignment="Top" Width="86" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnNoJavaCancel_Click"/>
+            </Grid>
+        </Border>
+        <Border x:Name="bdrNeed64BitJava" BorderThickness="1" HorizontalAlignment="Left" Height="211" Margin="10,37.24,0,0" Grid.RowSpan="3" VerticalAlignment="Top" Width="428" Background="White" Grid.Row="1" Visibility="Collapsed">
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="0.985,0.979" StartPoint="0.033,0.027">
+                    <GradientStop Color="Black" Offset="0.665"/>
+                    <GradientStop Color="#FF68FF00" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Border.Effect>
+                <DropShadowEffect Direction="270" BlurRadius="15" ShadowDepth="3"/>
+            </Border.Effect>
+            <Grid>
+                <Label x:Name="titleNeed64BitJava" Content="64 位元 Java" Height="43" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" BorderThickness="0,0,0,1">
+                    <Label.BorderBrush>
+                        <LinearGradientBrush EndPoint="0,0.99" StartPoint="1.001,0.991">
+                            <GradientStop Offset="0"/>
+                            <GradientStop Offset="1"/>
+                            <GradientStop Color="Black" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Label.BorderBrush>
+                </Label>
+                <TextBlock x:Name="txtNeed64BitJava" HorizontalAlignment="Left" Height="73.59" Margin="76,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"><Run Language="zh-tw" Text="您的作業系統為 64 位元版本，建議您安裝 64 位元的 Java 環境來取得更佳的遊戲體驗。"/><LineBreak/><Run Language="zh-tw"/><LineBreak/><Run Language="zh-tw" Text="請按「安裝 64 位元 Java」鈕來安裝。"/></TextBlock>
+                <Image HorizontalAlignment="Left" Height="61.59" Margin="10,65,0,0" VerticalAlignment="Top" Width="61" Source="Warning-icon.png">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="2"/>
+                    </Image.Effect>
+                </Image>
+                <Button x:Name="btnNeed64JavaInstall" Content="安裝 64 位元 _Java" HorizontalAlignment="Left" Height="29" Margin="99,158.59,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnNeed64JavaInstall_Click"/>
+                <Button x:Name="btnNeed64JavaIgnore" Content="略過" HorizontalAlignment="Left" Height="29" Margin="233,158.59,0,0" VerticalAlignment="Top" Width="86" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnNeed64JavaIgnore_Click"/>
+            </Grid>
+        </Border>
+        <Border x:Name="bdrNoLaunchGame" BorderThickness="1" HorizontalAlignment="Left" Height="211" Margin="10,32.24,0,0" VerticalAlignment="Top" Width="428" Background="White" Grid.RowSpan="3" Grid.Row="1" Visibility="Collapsed" d:IsLocked="True">
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="0.983,0.974" StartPoint="0.03,0.033">
+                    <GradientStop Color="Black" Offset="0.757"/>
+                    <GradientStop Color="#FF68FF00" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
+            <Border.Effect>
+                <DropShadowEffect Direction="270" BlurRadius="15" ShadowDepth="3"/>
+            </Border.Effect>
+            <Grid>
+                <Label Content="無法啟動遊戲" Height="43" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="16" BorderThickness="0,0,0,1">
+                    <Label.BorderBrush>
+                        <LinearGradientBrush EndPoint="0,0.99" StartPoint="1.001,0.991">
+                            <GradientStop Offset="0"/>
+                            <GradientStop Offset="1"/>
+                            <GradientStop Color="Black" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Label.BorderBrush>
+                </Label>
+                <TextBlock HorizontalAlignment="Left" Height="73.59" Margin="76,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"><Run Language="zh-tw" Text="我們偵測到遊戲無法順利啟動。請檢查您目前的遊戲設定值是否適合您的電腦，例如記憶體使用量限制是否過大。"/><LineBreak/><Run Language="zh-tw"/><LineBreak/><Run Language="zh-tw" Text="修改完成後請再次嘗試啟動遊戲。"/><LineBreak/></TextBlock>
+                <Image HorizontalAlignment="Left" Height="61.59" Margin="10,65,0,0" VerticalAlignment="Top" Width="61" Source="error.png">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="15" Direction="270" ShadowDepth="1"/>
+                    </Image.Effect>
+                </Image>
+                <Button x:Name="btnNoLaunchGameSetting" Content="設定(_S)" HorizontalAlignment="Left" Height="29" Margin="86,158.59,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnNoLaunchGameSetting_Click"/>
+                <Button x:Name="btnNoLaunchGameOK" Content="確定" HorizontalAlignment="Left" Height="29" Margin="253,158.59,0,0" VerticalAlignment="Top" Width="86" Style="{DynamicResource ButtonStyle_Main}" Foreground="White" Click="btnNoLaunchGameOK_Click"/>
+            </Grid>
+        </Border>
+        <Border x:Name="bdrStatus" BorderThickness="1" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="448" Background="White" Margin="0.001,68.24,-0.001,0" Grid.RowSpan="2">
+            <Grid>
+                <ProgressBar x:Name="pbrStatus" HorizontalAlignment="Left" Height="5" Margin="0,28,0,0" VerticalAlignment="Top" Width="446" Foreground="#FF009114" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                <Image x:Name="imgSettings" HorizontalAlignment="Left" Height="30" Margin="414,3,0,0" VerticalAlignment="Top" Width="25" Source="settings.png" MouseDown="imgSettings_MouseDown" Cursor="Hand"/>
+                <Image x:Name="imgProfile" HorizontalAlignment="Left" Height="30" Margin="383.818,3,0,0" VerticalAlignment="Top" Width="25" Source="account.png" MouseDown="imgProfile_MouseDown" Cursor="Hand"/>
+                <Label x:Name="txtMainStatus1" Content="歡迎使用 PowerLi Minecraft Server！" HorizontalAlignment="Left" Width="330" VerticalContentAlignment="Center" Margin="10,0,0,0" RenderTransformOrigin="0.5,0.5" Height="33" VerticalAlignment="Top">
+                    <Label.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Label.RenderTransform>
+                </Label>
+                <Label x:Name="txtMainStatus2" Content="歡迎使用 PowerLi Minecraft Server！" HorizontalAlignment="Left" Width="330" VerticalContentAlignment="Center" Margin="10,0,0,-34" Opacity="0" RenderTransformOrigin="0.5,0.5" Height="33" VerticalAlignment="Bottom" Visibility="Hidden">
+                    <Label.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Label.RenderTransform>
+                </Label>
+            </Grid>
+        </Border>
+        <Label x:Name="txtOnlinePlayers" Content="--" HorizontalAlignment="Left" Height="32" Margin="364,1,0,0" Grid.Row="5" VerticalAlignment="Top" Width="23" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseDown="txtOnlinePlayers_Click"/>
+        <Border x:Name="bdrOnlinePlayers" BorderThickness="1" HorizontalAlignment="Left" Height="317" Margin="10,59,0,0" Grid.Row="2" Grid.RowSpan="3" VerticalAlignment="Top" Width="428" Background="White" Visibility="Collapsed">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0"/>
+            </Border.Effect>
+            <Grid>
+                <Label x:Name="titleOnlinePlayers" Content="線上玩家名單" HorizontalAlignment="Left" Height="37.59" Margin="0,0.41,0,0" VerticalAlignment="Top" Width="426" VerticalContentAlignment="Center" FontSize="16" HorizontalContentAlignment="Center" Padding="0,5,5,5" BorderThickness="0,0,0,1">
+                    <Label.BorderBrush>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,1">
+                            <GradientStop Offset="0"/>
+                            <GradientStop Offset="1"/>
+                            <GradientStop Color="Black" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </Label.BorderBrush>
+                </Label>
+                <Button x:Name="btnCloseOnlinePlayers" Content="r" HorizontalAlignment="Left" Height="28" Margin="398,0,0,0" Style="{DynamicResource ButtonStyle_TitleButton}" VerticalAlignment="Top" Width="28" FontFamily="Webdings" Click="btnCloseOnlinePlayers_Click" Foreground="#FF000001"/>
+                <ListBox x:Name="lstOnlinePlayers" HorizontalAlignment="Left" Height="262" Margin="10,43,0,0" VerticalAlignment="Top" Width="406"/>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>
